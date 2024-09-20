@@ -6,7 +6,7 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import { useKeyboardHandler } from "../../hooks";
+import { useKeyboardHandler } from "react-native-keyboard-controller";
 
 const IS_ANDROID_ELEVEN_OR_HIGHER =
   Platform.OS === "android" && Platform.Version >= 30;
@@ -54,7 +54,6 @@ export const useSmoothKeyboardHandler: typeof useKeyboardHandler = (
         height: animatedKeyboardHeight.value,
         progress: animatedKeyboardHeight.value / persistedHeight.value,
       };
-
       return event;
     },
     (evt) => {

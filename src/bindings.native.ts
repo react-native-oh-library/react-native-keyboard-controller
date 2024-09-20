@@ -17,7 +17,6 @@ const LINKING_ERROR =
 
 const RCTKeyboardController =
   require("./specs/NativeKeyboardController").default;
-
 export const KeyboardController = (
   RCTKeyboardController
     ? RCTKeyboardController

@@ -47,8 +47,6 @@ export type EventWithName<T> = {
 
 // native View/Module declarations
 export type KeyboardControllerProps = {
-  //ref prop
-  ref?: React.Ref<React.Component<KeyboardControllerProps>>;
   // callback props
   onKeyboardMoveStart?: (
     e: NativeSyntheticEvent<EventWithName<NativeEvent>>,
@@ -103,10 +101,6 @@ export type KeyboardGestureAreaProps = {
    * Defaults to `true`.
    */
   enableSwipeToDismiss?: boolean;
-  /**
-   * Extra distance to the keyboard.
-   */
-  offset?: number;
 } & ViewProps;
 
 export type Direction = "next" | "prev" | "current";

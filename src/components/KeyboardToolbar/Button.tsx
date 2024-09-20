@@ -10,11 +10,11 @@ import useColorScheme from "../hooks/useColorScheme";
 
 import type { KeyboardToolbarTheme } from "./types";
 import type { PropsWithChildren } from "react";
-import type { GestureResponderEvent, ViewStyle } from "react-native";
+import type { ViewStyle } from "react-native";
 
 type ButtonProps = {
   disabled?: boolean;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress: () => void;
   accessibilityLabel: string;
   accessibilityHint: string;
   testID: string;
@@ -41,13 +41,13 @@ const ButtonIOS = ({
 
   return (
     <Container
-      accessibilityHint={accessibilityHint}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="button"
       accessibilityState={accessibilityState}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+      onPress={onPress}
       style={style}
       testID={testID}
-      onPress={onPress}
     >
       {children}
     </Container>
@@ -78,14 +78,14 @@ const ButtonAndroid = ({
 
   return (
     <TouchableNativeFeedback
-      accessibilityHint={accessibilityHint}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityRole="button"
       accessibilityState={accessibilityState}
-      background={ripple}
-      style={style}
-      testID={testID}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       onPress={onPress}
+      background={ripple}
+      testID={testID}
+      style={style}
     >
       <View style={style}>{children}</View>
     </TouchableNativeFeedback>

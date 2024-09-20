@@ -1,42 +1,19 @@
-# react-native-keyboard-controller
+# @react-native-oh-tpl/react-native-keyboard-controller
 
-Keyboard manager which works in identical way on both iOS and Android.
+本项目基于 [react-native-keyboard-controller (原库NPM包名)](https://github.com/kirillzyusko/react-native-keyboard-controller)
 
-## Demonstration
+## 文档地址 / Documentation URL 
 
-<img src="./gifs/demo.gif?raw=true" width="60%">
+[中文 / Chinese](https://gitee.com/react-native-oh-library/usage-docs/blob/master/zh-cn/react-native-keyboard-controller.md)
 
-## Key features
+[英文 / English](https://gitee.com/react-native-oh-library/usage-docs/blob/master/zh-en/react-native-keyboard-controller.md)
 
-- mapping keyboard movement to animated values 😎
-- missing `keyboardWillShow` / `keyboardWillHide` events are available on Android 😍
-- module for changing soft input mode on Android 🤔
-- reanimated support 🚀
-- interactive keyboard dismissing 👆📱
-- prebuilt components (`KeyboardStickyView`, `KeyboardAwareScrollView`, re-worked `KeyboardAvoidingView`) 📚
-- `KeyboardToolbar` with easy behavior customization of _**previous**_, _**next**_ and _**done**_ buttons in the keyboard toolbar 📐
-- easy focused input information retrieval 📝 🔮
-- works with any navigation library 🧭
-- and more is coming... Stay tuned! 😊
+## Codegen
 
-## Installation
+该库已接入 codegen，具体请查阅文档。
 
-Install `react-native-keyboard-controller` package from npm:
+The library has been integrated with codegen. Please refer to the documentation for details.
 
-```shell
-yarn add react-native-keyboard-controller
-# or
-npm install react-native-keyboard-controller --save
-```
+## 请悉知 / Acknowledgements
 
-## Documentation
-
-Check out our dedicated documentation page for info about this library, API reference and more: [https://kirillzyusko.github.io/react-native-keyboard-controller/](https://kirillzyusko.github.io/react-native-keyboard-controller/)
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
+本项目基于 [The MIT License (MIT)](https://github.com/kirillzyusko/react-native-keyboard-controller/blob/main/LICENSE) ，请自由地享受和参与开源。

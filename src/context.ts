@@ -2,9 +2,9 @@ import { createContext, useContext } from "react";
 import { Animated } from "react-native";
 
 import type {
-  FocusedInputHandler,
+  FocusedInputHandlers,
   FocusedInputLayoutChangedEvent,
-  KeyboardHandler,
+  KeyboardHandlers,
 } from "./types";
 import type React from "react";
 import type { SharedValue } from "react-native-reanimated";
@@ -22,12 +22,11 @@ export type KeyboardAnimationContext = {
   animated: AnimatedContext;
   reanimated: ReanimatedContext;
   layout: SharedValue<FocusedInputLayoutChangedEvent | null>;
-  setKeyboardHandlers: (handlers: KeyboardHandler) => () => void;
-  setInputHandlers: (handlers: FocusedInputHandler) => () => void;
+  setKeyboardHandlers: (handlers: KeyboardHandlers) => void;
+  setInputHandlers: (handlers: FocusedInputHandlers) => void;
   setEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const NOOP = () => {};
-const NESTED_NOOP = () => NOOP;
 const withSharedValue = <T>(value: T): SharedValue<T> => ({
   value,
   addListener: NOOP,
@@ -49,11 +48,10 @@ const defaultContext: KeyboardAnimationContext = {
     height: DEFAULT_SHARED_VALUE,
   },
   layout: DEFAULT_LAYOUT,
-  setKeyboardHandlers: NESTED_NOOP,
-  setInputHandlers: NESTED_NOOP,
+  setKeyboardHandlers: NOOP,
+  setInputHandlers: NOOP,
   setEnabled: NOOP,
 };
-
 export const KeyboardContext = createContext(defaultContext);
 export const useKeyboardContext = () => {
   const context = useContext(KeyboardContext);
