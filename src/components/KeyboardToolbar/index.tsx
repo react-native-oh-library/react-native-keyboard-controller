@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { FocusedInputEvents, KeyboardController } from "../../bindings";
+import {
+  FocusedInputEvents,
+  KeyboardStickyView,
+} from "react-native-keyboard-controller";
+
+import { KeyboardController } from "../../bindings";
 import useColorScheme from "../hooks/useColorScheme";
-import KeyboardStickyView from "../KeyboardStickyView";
 
 import Arrow from "./Arrow";
 import Button from "./Button";
@@ -11,7 +15,6 @@ import { colors } from "./colors";
 
 import type { HEX, KeyboardToolbarTheme } from "./types";
 import type { ReactNode } from "react";
-import type { GestureResponderEvent } from "react-native";
 
 export type KeyboardToolbarProps = {
   /** An element that is shown in the middle of the toolbar. */
@@ -32,15 +35,15 @@ export type KeyboardToolbarProps = {
   /**
    * A callback that is called when the user presses the next button along with the default action.
    */
-  onNextCallback?: (event: GestureResponderEvent) => void;
+  onNextCallback?: () => void;
   /**
    * A callback that is called when the user presses the previous button along with the default action.
    */
-  onPrevCallback?: (event: GestureResponderEvent) => void;
+  onPrevCallback?: () => void;
   /**
    * A callback that is called when the user presses the done button along with the default action.
    */
-  onDoneCallback?: (event: GestureResponderEvent) => void;
+  onDoneCallback?: () => void;
   /**
    * A component that applies blur effect to the toolbar.
    */
@@ -50,7 +53,6 @@ export type KeyboardToolbarProps = {
    */
   opacity?: HEX;
 };
-
 const TEST_ID_KEYBOARD_TOOLBAR = "keyboard.toolbar";
 const TEST_ID_KEYBOARD_TOOLBAR_PREVIOUS = `${TEST_ID_KEYBOARD_TOOLBAR}.previous`;
 const TEST_ID_KEYBOARD_TOOLBAR_NEXT = `${TEST_ID_KEYBOARD_TOOLBAR}.next`;
@@ -113,36 +115,18 @@ const KeyboardToolbar: React.FC<KeyboardToolbarProps> = ({
   const ButtonContainer = button || Button;
   const IconContainer = icon || Arrow;
 
-  const onPressNext = useCallback(
-    (event: GestureResponderEvent) => {
-      onNextCallback?.(event);
-
-      if (!event.isDefaultPrevented()) {
-        goToNextField();
-      }
-    },
-    [onNextCallback],
-  );
-  const onPressPrev = useCallback(
-    (event: GestureResponderEvent) => {
-      onPrevCallback?.(event);
-
-      if (!event.isDefaultPrevented()) {
-        goToPrevField();
-      }
-    },
-    [onPrevCallback],
-  );
-  const onPressDone = useCallback(
-    (event: GestureResponderEvent) => {
-      onDoneCallback?.(event);
-
-      if (!event.isDefaultPrevented()) {
-        dismissKeyboard();
-      }
-    },
-    [onDoneCallback],
-  );
+  const onPressNext = useCallback(() => {
+    goToNextField();
+    onNextCallback?.();
+  }, [onNextCallback]);
+  const onPressPrev = useCallback(() => {
+    goToPrevField();
+    onPrevCallback?.();
+  }, [onPrevCallback]);
+  const onPressDone = useCallback(() => {
+    dismissKeyboard();
+    onDoneCallback?.();
+  }, [onDoneCallback]);
 
   return (
     <KeyboardStickyView offset={offset}>
@@ -151,31 +135,31 @@ const KeyboardToolbar: React.FC<KeyboardToolbarProps> = ({
         {showArrows && (
           <>
             <ButtonContainer
-              accessibilityHint="Moves focus to the previous field"
               accessibilityLabel="Previous"
+              accessibilityHint="Will move focus to previous field"
               disabled={isPrevDisabled}
+              onPress={onPressPrev}
               testID={TEST_ID_KEYBOARD_TOOLBAR_PREVIOUS}
               theme={theme}
-              onPress={onPressPrev}
             >
               <IconContainer
                 disabled={isPrevDisabled}
-                theme={theme}
                 type="prev"
+                theme={theme}
               />
             </ButtonContainer>
             <ButtonContainer
-              accessibilityHint="Moves focus to the next field"
               accessibilityLabel="Next"
+              accessibilityHint="Will move focus to next field"
               disabled={isNextDisabled}
+              onPress={onPressNext}
               testID={TEST_ID_KEYBOARD_TOOLBAR_NEXT}
               theme={theme}
-              onPress={onPressNext}
             >
               <IconContainer
                 disabled={isNextDisabled}
-                theme={theme}
                 type="next"
+                theme={theme}
               />
             </ButtonContainer>
           </>
@@ -185,15 +169,15 @@ const KeyboardToolbar: React.FC<KeyboardToolbarProps> = ({
           {content}
         </View>
         <ButtonContainer
-          accessibilityHint="Closes the keyboard"
           accessibilityLabel="Done"
+          accessibilityHint="Will close the keyboard"
+          onPress={onPressDone}
+          testID={TEST_ID_KEYBOARD_TOOLBAR_DONE}
           rippleRadius={28}
           style={styles.doneButtonContainer}
-          testID={TEST_ID_KEYBOARD_TOOLBAR_DONE}
           theme={theme}
-          onPress={onPressDone}
         >
-          <Text maxFontSizeMultiplier={1.3} style={doneStyle}>
+          <Text style={doneStyle} maxFontSizeMultiplier={1.3}>
             {doneText || "Done"}
           </Text>
         </ButtonContainer>

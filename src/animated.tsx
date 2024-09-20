@@ -1,16 +1,16 @@
-/* eslint react/jsx-sort-props: off */
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Animated, Platform, StyleSheet } from "react-native";
 import Reanimated, { useSharedValue } from "react-native-reanimated";
 
 import { KeyboardControllerView } from "./bindings";
 import { KeyboardContext } from "./context";
-import { focusedInputEventsMap, keyboardEventsMap } from "./event-mappings";
-import { useAnimatedValue, useEventHandlerRegistration } from "./internal";
+import { useAnimatedValue, useSharedHandlers } from "./internal";
 import { applyMonkeyPatch, revertMonkeyPatch } from "./monkey-patch";
 import {
   useAnimatedKeyboardHandler,
   useFocusedInputLayoutHandler,
+  useFocusedInputSelectionHandler,
+  useFocusedInputTextHandler,
 } from "./reanimated";
 
 import type { KeyboardAnimationContext } from "./context";
@@ -24,7 +24,9 @@ import type {
 import type { ViewStyle } from "react-native";
 
 const KeyboardControllerViewAnimated = Reanimated.createAnimatedComponent(
-  Animated.createAnimatedComponent(KeyboardControllerView),
+  Animated.createAnimatedComponent(
+    KeyboardControllerView,
+  ) as React.FC<KeyboardControllerProps>,
 );
 
 type Styles = {
@@ -81,8 +83,6 @@ export const KeyboardProvider = ({
   navigationBarTranslucent,
   enabled: initiallyEnabled = true,
 }: KeyboardProviderProps) => {
-  // ref
-  const viewTagRef = useRef<React.Component<KeyboardControllerProps>>(null);
   // state
   const [enabled, setEnabled] = useState(initiallyEnabled);
   // animated values
@@ -92,19 +92,15 @@ export const KeyboardProvider = ({
   const progressSV = useSharedValue(0);
   const heightSV = useSharedValue(0);
   const layout = useSharedValue<FocusedInputLayoutChangedEvent | null>(null);
-  const setKeyboardHandlers = useEventHandlerRegistration<KeyboardHandler>(
-    keyboardEventsMap,
-    viewTagRef,
-  );
-  const setInputHandlers = useEventHandlerRegistration<FocusedInputHandler>(
-    focusedInputEventsMap,
-    viewTagRef,
-  );
+  const [setKeyboardHandlers, broadcastKeyboardEvents] =
+    useSharedHandlers<KeyboardHandler>();
+  const [setInputHandlers, broadcastInputEvents] =
+    useSharedHandlers<FocusedInputHandler>();
   // memo
   const context = useMemo<KeyboardAnimationContext>(
     () => ({
       enabled,
-      animated: { progress: progress, height: Animated.multiply(height, -1) },
+      animated: { progress: progress, height: Animated.multiply(height,-1)  },
       reanimated: { progress: progressSV, height: heightSV },
       layout,
       setKeyboardHandlers,
@@ -131,7 +127,7 @@ export const KeyboardProvider = ({
             },
           },
         ],
-        { useNativeDriver: true },
+        { useNativeDriver:Platform.OS as string=='harmony'?false:true },
       ),
     [],
   );
@@ -139,7 +135,7 @@ export const KeyboardProvider = ({
   const updateSharedValues = (event: NativeEvent, platforms: string[]) => {
     "worklet";
 
-    if (platforms.includes(OS)) {
+    if (platforms.includes(OS)||Platform.OS as string=='harmony') {
       // eslint-disable-next-line react-compiler/react-compiler
       progressSV.value = event.progress;
       heightSV.value = -event.height;
@@ -150,17 +146,26 @@ export const KeyboardProvider = ({
       onKeyboardMoveStart: (event: NativeEvent) => {
         "worklet";
 
+        broadcastKeyboardEvents("onStart", event);
         updateSharedValues(event, ["ios"]);
       },
       onKeyboardMove: (event: NativeEvent) => {
         "worklet";
 
+        broadcastKeyboardEvents("onMove", event);
         updateSharedValues(event, ["android"]);
+      },
+      onKeyboardMoveEnd: (event: NativeEvent) => {
+        "worklet";
+   
+        broadcastKeyboardEvents("onEnd", event);
+        updateSharedValues(event, ['harmony']);
       },
       onKeyboardMoveInteractive: (event: NativeEvent) => {
         "worklet";
 
         updateSharedValues(event, ["android", "ios"]);
+        broadcastKeyboardEvents("onInteractive", event);
       },
     },
     [],
@@ -179,7 +184,26 @@ export const KeyboardProvider = ({
     },
     [],
   );
+  const inputTextHandler = useFocusedInputTextHandler(
+    {
+      onFocusedInputTextChanged: (e) => {
+        "worklet";
 
+        broadcastInputEvents("onChangeText", e);
+      },
+    },
+    [],
+  );
+  const inputSelectionHandler = useFocusedInputSelectionHandler(
+    {
+      onFocusedInputSelectionChanged: (e) => {
+        "worklet";
+
+        broadcastInputEvents("onSelectionChange", e);
+      },
+    },
+    [],
+  );
   // effects
   useEffect(() => {
     if (enabled) {
@@ -192,17 +216,18 @@ export const KeyboardProvider = ({
   return (
     <KeyboardContext.Provider value={context}>
       <KeyboardControllerViewAnimated
-        ref={viewTagRef}
         enabled={enabled}
-        navigationBarTranslucent={navigationBarTranslucent}
-        statusBarTranslucent={statusBarTranslucent}
-        style={styles.container}
-        // on*Reanimated prop must precede animated handlers to work correctly
         onKeyboardMoveReanimated={keyboardHandler}
         onKeyboardMoveStart={OS === "ios" ? onKeyboardMove : undefined}
         onKeyboardMove={OS === "android" ? onKeyboardMove : undefined}
         onKeyboardMoveInteractive={onKeyboardMove}
+        onKeyboardMoveEnd={ OS as string === "harmony"?onKeyboardMove:undefined}
         onFocusedInputLayoutChangedReanimated={inputLayoutHandler}
+        onFocusedInputTextChangedReanimated={inputTextHandler}
+        onFocusedInputSelectionChangedReanimated={inputSelectionHandler}
+        navigationBarTranslucent={navigationBarTranslucent}
+        statusBarTranslucent={statusBarTranslucent}
+        style={styles.container}
       >
         {children}
       </KeyboardControllerViewAnimated>

@@ -8,7 +8,7 @@ import Reanimated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { useWindowDimensions } from "../../hooks";
+import { useWindowDimensions } from "react-native-keyboard-controller";
 
 import { useKeyboardAnimation } from "./hooks";
 
@@ -144,8 +144,8 @@ const KeyboardAvoidingView = forwardRef<
     return (
       <Reanimated.View
         ref={ref}
-        style={combinedStyles}
         onLayout={onLayout}
+        style={combinedStyles}
         {...props}
       >
         {children}
