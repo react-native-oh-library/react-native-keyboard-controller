@@ -1,6 +1,6 @@
 {
   "name": "@react-native-oh-tpl/react-native-keyboard-controller",
-  "version": "1.12.17-0.0.1",
+  "version": "1.12.7-0.0.1",
   "description": "Keyboard manager which works in identical way on  iOS and Android and harmony",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -12,6 +12,7 @@
     "lib",
     "android",
     "ios",
+    "harmony",
     "cpp",
     "react-native-keyboard-controller.podspec",
     "jest",
@@ -106,7 +107,7 @@
     "react": "*",
     "react-native": "*",
     "react-native-reanimated": ">=3.0.0",
-    "react-native-keyboard-controller": "1.12.17"
+    "react-native-keyboard-controller": "1.12.7"
   },
   "jest": {
     "preset": "react-native",
@@ -165,6 +166,5 @@
   },
   "harmony": {
     "alias": "react-native-keyboard-controller"
-  },
-  "exclude": ["harmony"]
+  }
 }
