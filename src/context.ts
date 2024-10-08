@@ -55,7 +55,7 @@ const defaultContext: KeyboardAnimationContext = {
 export const KeyboardContext = createContext(defaultContext);
 export const useKeyboardContext = () => {
   const context = useContext(KeyboardContext);
-
+  console.log('###KeyboardContext',context,context.animated.height);
   if (__DEV__ && context === defaultContext) {
     console.warn(
       "Couldn't find real values for `KeyboardContext`. Please make sure you're inside of `KeyboardProvider` - otherwise functionality of `react-native-keyboard-controller` will not work.",

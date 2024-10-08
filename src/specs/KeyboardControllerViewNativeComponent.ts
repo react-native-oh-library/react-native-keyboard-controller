@@ -66,5 +66,5 @@ export interface NativeProps extends ViewProps {
 }
 
 export default codegenNativeComponent<NativeProps>(
-  "KeyboardControllerView",
+  "RNKeyboardControllerView",
 ) as HostComponent<NativeProps>;

@@ -33,7 +33,6 @@ const KeyboardStickyView = forwardRef<
     ref,
   ) => {
     const { height, progress } = useReanimatedKeyboardAnimation();
-
     const stickyViewStyle = useAnimatedStyle(() => {
       const offset = interpolate(progress.value, [0, 1], [closed, opened]);
 

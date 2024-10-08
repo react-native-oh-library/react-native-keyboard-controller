@@ -17,10 +17,10 @@ namespace rnoh {
  class KeyboardControllerComponentInstanceFactoryDelegate : public ComponentInstanceFactoryDelegate {
  public:
         ComponentInstance::Shared create(ComponentInstance::Context ctx) override {
-            if (ctx.componentName == "KeyboardControllerView") {
+            if (ctx.componentName == "RNKeyboardControllerView") {
                 return std::make_shared<KeyboardControllerViewComponentInstance>(ctx);
             }
-         if (ctx.componentName == "KeyboardGestureArea") {
+         if (ctx.componentName == "RNKeyboardGestureArea") {
                 return std::make_shared<KeyboardGestureAreaComponentInstance>(ctx);
             }
             return nullptr;

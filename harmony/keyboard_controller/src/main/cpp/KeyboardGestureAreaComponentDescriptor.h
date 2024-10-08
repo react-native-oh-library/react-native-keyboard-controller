@@ -31,7 +31,7 @@
 namespace facebook {
 namespace react {
 
-inline const char KeyboardGestureAreaComponentName[] = "KeyboardGestureArea";
+inline const char KeyboardGestureAreaComponentName[] = "RNKeyboardGestureArea";
 
 class KeyboardGestureAreaProps : public ViewProps {
 public:

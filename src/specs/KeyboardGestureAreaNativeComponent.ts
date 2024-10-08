@@ -10,6 +10,6 @@ export interface NativeProps extends ViewProps {
   enableSwipeToDismiss?: boolean;
 }
 
-export default codegenNativeComponent<NativeProps>("KeyboardGestureArea", {
+export default codegenNativeComponent<NativeProps>("RNKeyboardGestureArea", {
   excludedPlatforms: ["iOS"],
 }) as HostComponent<NativeProps>;

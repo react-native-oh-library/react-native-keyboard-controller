@@ -17,8 +17,8 @@ KeyboardControllerPackage::createComponentDescriptorProviders() {
                 facebook::react::KeyboardGestureAreaComponentDescriptor>()};
 }
 ComponentJSIBinderByString KeyboardControllerPackage::createComponentJSIBinderByName() {
-    return {{"KeyboardControllerView", std::make_shared<KeyboardControllerViewJSIBinder>()},
-            {"KeyboardGestureArea", std::make_shared<KeyboardGestureAreaJSIBinder>()}};
+    return {{"RNKeyboardControllerView", std::make_shared<KeyboardControllerViewJSIBinder>()},
+            {"RNKeyboardGestureArea", std::make_shared<KeyboardGestureAreaJSIBinder>()}};
 }
 
 std::unique_ptr<TurboModuleFactoryDelegate> KeyboardControllerPackage::createTurboModuleFactoryDelegate() {
@@ -30,10 +30,10 @@ ComponentInstanceFactoryDelegate::Shared KeyboardControllerPackage::createCompon
 };
 
 ComponentInstance::Shared KeyboardControllerPackage::createComponentInstance(const ComponentInstance::Context &ctx) {
-    if (ctx.componentName == "KeyboardControllerView") {
+    if (ctx.componentName == "RNKeyboardControllerView") {
         return std::make_shared<KeyboardControllerViewComponentInstance>(ctx);
     }
-    if (ctx.componentName == "KeyboardGestureArea") {
+    if (ctx.componentName == "RNKeyboardGestureArea") {
         return std::make_shared<KeyboardGestureAreaComponentInstance>(ctx);
     }
     return nullptr;
