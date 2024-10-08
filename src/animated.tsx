@@ -135,7 +135,7 @@ export const KeyboardProvider = ({
   const updateSharedValues = (event: NativeEvent, platforms: string[]) => {
     "worklet";
 
-    if (platforms.includes(OS)||Platform.OS as string=='harmony') {
+    if (platforms.includes(OS)) {
       // eslint-disable-next-line react-compiler/react-compiler
       progressSV.value = event.progress;
       heightSV.value = -event.height;
@@ -157,7 +157,6 @@ export const KeyboardProvider = ({
       },
       onKeyboardMoveEnd: (event: NativeEvent) => {
         "worklet";
-   
         broadcastKeyboardEvents("onEnd", event);
         updateSharedValues(event, ['harmony']);
       },
@@ -198,7 +197,6 @@ export const KeyboardProvider = ({
     {
       onFocusedInputSelectionChanged: (e) => {
         "worklet";
-
         broadcastInputEvents("onSelectionChange", e);
       },
     },

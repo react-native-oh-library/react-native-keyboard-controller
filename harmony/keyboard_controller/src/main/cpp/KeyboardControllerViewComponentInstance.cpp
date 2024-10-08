@@ -116,7 +116,7 @@ void KeyboardControllerViewComponentInstance::keyboardHeightChangeHandle() {
     if (rnInstancePtr != nullptr && this->enabled) {
         if (this->keyboardStatus == KeyboardControllerStatus::HIDE) {
             facebook::react::KeyboardControllerViewEventEmitter::MoveEvent start = {this->keyboardHeight, 0, 0, m_tag};
-            facebook::react::KeyboardControllerViewEventEmitter::MoveEvent end = {0, 0, 0, m_tag};
+            facebook::react::KeyboardControllerViewEventEmitter::MoveEvent end = {0, 1, 0, m_tag};
             m_eventEmitter->onKeyboardMove(end);
             m_eventEmitter->onKeyboardMoveEnd(end);
         } else {

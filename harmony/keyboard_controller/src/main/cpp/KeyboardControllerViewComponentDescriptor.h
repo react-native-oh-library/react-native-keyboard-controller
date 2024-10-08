@@ -30,7 +30,7 @@
 namespace facebook {
 namespace react {
 
-inline const char KeyboardControllerViewName[] = "KeyboardControllerView";
+inline const char KeyboardControllerViewName[] = "RNKeyboardControllerView";
 
 class KeyboardControllerViewProps : public ViewProps {
 public:
