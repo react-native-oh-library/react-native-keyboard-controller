@@ -99,7 +99,6 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
     }
     if (num - currentCount == 0) {
       this.eventListeners = [];
-      this.startKeyboardObserver(false);
     } else {
       this.eventListeners = this.eventListeners.slice(0, num - currentCount);
     }

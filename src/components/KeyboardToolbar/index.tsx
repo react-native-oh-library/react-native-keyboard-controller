@@ -3,9 +3,8 @@ import { StyleSheet, Text, View } from "react-native";
 
 import {
   FocusedInputEvents,
-  KeyboardStickyView,
-} from "react-native-keyboard-controller";
-
+} from "../../bindings";
+import KeyboardStickyView from "../KeyboardStickyView"
 import { KeyboardController } from "../../bindings";
 import useColorScheme from "../hooks/useColorScheme";
 

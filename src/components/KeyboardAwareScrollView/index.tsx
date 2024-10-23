@@ -14,7 +14,7 @@ import {
   useFocusedInputHandler,
   useReanimatedFocusedInput,
   useWindowDimensions,
-} from "react-native-keyboard-controller";
+} from "../../hooks";
 
 import { useSmoothKeyboardHandler } from "./useSmoothKeyboardHandler";
 import { debounce, scrollDistanceWithRespectToSnapPoints } from "./utils";
@@ -27,7 +27,7 @@ import type {
 import type {
   FocusedInputLayoutChangedEvent,
   FocusedInputSelectionChangedEvent,
-} from "react-native-keyboard-controller";
+} from "..//../types";
 
 export type KeyboardAwareScrollViewProps = {
   /** The distance between keyboard and focused `TextInput` when keyboard is shown. Default is `0`. */
