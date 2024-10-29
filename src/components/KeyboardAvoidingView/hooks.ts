@@ -1,9 +1,8 @@
 import { useSharedValue } from "react-native-reanimated";
 
-import {
-  useKeyboardContext,
-  useKeyboardHandler,
-} from "react-native-keyboard-controller";
+import {useKeyboardHandler} from "../../hooks";
+import {useKeyboardContext} from "../../context";
+import { Platform } from "react-native";
 
 export const useKeyboardAnimation = () => {
   const { reanimated } = useKeyboardContext();
@@ -25,13 +24,16 @@ export const useKeyboardAnimation = () => {
       },
       onMove: (e) => {
         "worklet";
-
+  
         progress.value = e.progress;
         height.value = e.height;
       },
       onEnd: (e) => {
         "worklet";
-
+       if(Platform.OS as string === 'harmony'){
+        heightWhenOpened.value = e.height;
+       }
+  
         isClosed.value = e.height === 0;
 
         // `height` update happens in `onMove` handler

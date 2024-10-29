@@ -53,7 +53,6 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
    * @description 键盘隐藏
    * */
   dismiss(): void {
-    Logger.info("###turboModule dismiss");
     let inputMethodController = inputMethod.getController();
     inputMethodController.stopInputSession()
 
@@ -61,29 +60,24 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
   /**
    * @description 键盘隐藏
    * */
- private  show(): void {
-    Logger.info("###turboModule show");
+  private  show(): void {
     let inputMethodController = inputMethod.getController();
     inputMethodController.showSoftKeyboard()
 
   }
 
   setFocusTo(direction: string): void {
-    Logger.info("###turboModule setFocusTo");
     this.ctx.rnInstance.postMessageToCpp('setFocusTo', direction);
   }
 
   /**
    * @description 添加监听键盘事件
    */
-  addListener(eventName: string) {
-    Logger.info("###turboModule addListener");
-    let supportEvents = this.supportListeners();
-    let event = supportEvents.find((item) => {
-      return item.indexOf(eventName) > 0
-    })
-    if (event && !this.eventListeners.includes(event)) {
-      this.eventListeners.push(event)
+  addListener(eventName: KeyboardControllerEventName) {
+    let supportEvents = this.supportListeners()
+    let bo = supportEvents.includes(eventName)
+    if (bo && !this.eventListeners.includes(eventName)) {
+      this.eventListeners.push(eventName)
     }
   }
 
@@ -91,17 +85,9 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
    * @description 删除监听事件
    * */
   removeListeners(count: number): void {
-    Logger.info("###turboModule removeListeners");
-    let currentCount = Math.floor(count);
     let num = this.eventListeners.length;
-    if (currentCount > num) {
-      Logger.error("Attempted to remove more  listeners than added")
-    }
-    if (num - currentCount == 0) {
+    if (num>0) {
       this.eventListeners = [];
-      this.startKeyboardObserver(false);
-    } else {
-      this.eventListeners = this.eventListeners.slice(0, num - currentCount);
     }
   }
 
@@ -116,8 +102,7 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
   }
 
   private async setWindowSystemBarEnable(statusBarTranslucent: boolean, navigationBarTranslucent: boolean) {
-    Logger.info('###turboModule setWindowSystemBarEnable',
-      String(statusBarTranslucent) + ',' + String(navigationBarTranslucent));
+
     let windowInstance: window.Window | undefined = undefined;
     windowInstance = await window.getLastWindow(this.context);
     let systemBarProperty = windowInstance.getWindowSystemBarProperties();
@@ -140,11 +125,13 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
 
   private keyboardControllerEventHandle(keyboardStatus: number, height: number) {
     Logger.info('###turboModule keyboardControllerEventHandle', String(keyboardStatus) + ',' + String(height));
-   if(!this.enabled){
-     return
-   }
+    if(!this.enabled){
+      return
+    }
+
     if (this.keyboardStatus == KeyboardStatusType.HIDE) {
       // 键盘隐藏
+      Logger.info('###turboModule keyboardControllerEventHandle');
       this.eventListeners.includes(KeyboardControllerEventName.KEYBOARD_DID_HIDE) &&
       this.ctx.rnInstance.emitDeviceEvent(KeyboardControllerEventName.KEYBOARD_DID_HIDE, {
         duration: 0,
@@ -156,6 +143,7 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
     }
     if (this.keyboardStatus == KeyboardStatusType.SHOW) {
       // 键盘显示
+      Logger.info('###turboModule keyboardControllerEventHandle');
       this.eventListeners.includes(KeyboardControllerEventName.KEYBOARD_DID_SHOW) &&
       this.ctx.rnInstance.emitDeviceEvent(KeyboardControllerEventName.KEYBOARD_DID_SHOW, {
         duration: 0,
@@ -205,7 +193,6 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
             this.ctx.rnInstance.postMessageToCpp('keyboardHeightChange', height);
           }
 
-            Logger.info('Succeeded in enabling the listener for keyboard height changes. Data: ' + JSON.stringify(data));
         });
       } catch (exception) {
         Logger.error('Failed to enable the listener for keyboard height changes. Cause: ' + JSON.stringify(exception));

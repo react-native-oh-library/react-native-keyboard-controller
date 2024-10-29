@@ -116,13 +116,15 @@ void KeyboardControllerViewComponentInstance::keyboardHeightChangeHandle() {
     if (rnInstancePtr != nullptr && this->enabled) {
         if (this->keyboardStatus == KeyboardControllerStatus::HIDE) {
             facebook::react::KeyboardControllerViewEventEmitter::MoveEvent start = {this->keyboardHeight, 0, 0, m_tag};
-            facebook::react::KeyboardControllerViewEventEmitter::MoveEvent end = {0, 1, 0, m_tag};
-            m_eventEmitter->onKeyboardMove(end);
+            facebook::react::KeyboardControllerViewEventEmitter::MoveEvent end = {0, 0, 0, m_tag};
+            m_eventEmitter->onKeyboardMoveStart(start);
+              m_eventEmitter->onKeyboardMove(end);
             m_eventEmitter->onKeyboardMoveEnd(end);
         } else {
             facebook::react::KeyboardControllerViewEventEmitter::MoveEvent start = {0, 0, 0, m_tag};
             facebook::react::KeyboardControllerViewEventEmitter::MoveEvent end = {this->keyboardHeight, 1, 0, m_tag};
-            m_eventEmitter->onKeyboardMove(end);
+            m_eventEmitter->onKeyboardMoveStart(start);
+             m_eventEmitter->onKeyboardMove(end);
             m_eventEmitter->onKeyboardMoveEnd(end);
         }
     }
@@ -160,9 +162,11 @@ void KeyboardControllerViewComponentInstance::findTextInputComponents(
 }
 
 void KeyboardControllerViewComponentInstance::onChange(std::string text) {
-    DLOG(INFO) << "onKeyboardControllerView onChange";
     facebook::react::KeyboardControllerViewEventEmitter::TextChangeEvent event = {text};
-    m_eventEmitter->onFocusedInputTextChanged(event);
+    if(this->enabled){
+        m_eventEmitter->onFocusedInputTextChanged(event);
+     }
+
 }
 void KeyboardControllerViewComponentInstance::onTextSelectionChange(int32_t location, int32_t length) {
     DLOG(INFO) << " onKeyboardControllerView onTextSelectionChange";
