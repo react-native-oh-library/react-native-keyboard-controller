@@ -6,13 +6,13 @@ import {
   withTiming,
 } from "react-native-reanimated";
 
-import { useKeyboardHandler } from "react-native-keyboard-controller";
+import { useKeyboardHandler } from "../../hooks";
 
 const IS_ANDROID_ELEVEN_OR_HIGHER =
   Platform.OS === "android" && Platform.Version >= 30;
 // on these platforms keyboard transitions will be smooth
 const IS_ANDROID_ELEVEN_OR_HIGHER_OR_IOS =
-  IS_ANDROID_ELEVEN_OR_HIGHER || Platform.OS === "ios";
+  IS_ANDROID_ELEVEN_OR_HIGHER || Platform.OS === "ios" || Platform.OS as string === 'harmony';
 // on Android Telegram is not using androidx.core values and uses custom interpolation
 // duration is taken from here: https://github.com/DrKLO/Telegram/blob/e9a35cea54c06277c69d41b8e25d94b5d7ede065/TMessagesProj/src/main/java/org/telegram/ui/ActionBar/AdjustPanLayoutHelper.java#L39
 // and bezier is taken from: https://github.com/DrKLO/Telegram/blob/e9a35cea54c06277c69d41b8e25d94b5d7ede065/TMessagesProj/src/main/java/androidx/recyclerview/widget/ChatListItemAnimator.java#L40

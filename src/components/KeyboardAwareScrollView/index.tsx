@@ -14,7 +14,7 @@ import {
   useFocusedInputHandler,
   useReanimatedFocusedInput,
   useWindowDimensions,
-} from "react-native-keyboard-controller";
+} from "../../hooks";
 
 import { useSmoothKeyboardHandler } from "./useSmoothKeyboardHandler";
 import { debounce, scrollDistanceWithRespectToSnapPoints } from "./utils";
@@ -27,7 +27,7 @@ import type {
 import type {
   FocusedInputLayoutChangedEvent,
   FocusedInputSelectionChangedEvent,
-} from "react-native-keyboard-controller";
+} from "..//../types";
 
 export type KeyboardAwareScrollViewProps = {
   /** The distance between keyboard and focused `TextInput` when keyboard is shown. Default is `0`. */
@@ -344,14 +344,14 @@ const KeyboardAwareScrollView = forwardRef<
       () =>
         enabled
           ? {
-              // animations become choppy when scrolling to the end of the `ScrollView` (when the last input is focused)
-              // this happens because the layout recalculates on every frame. To avoid this we slightly increase padding
-              // by `+1`. In this way we assure, that `scrollTo` will never scroll to the end, because it uses interpolation
-              // from 0 to `keyboardHeight`, and here our padding is `keyboardHeight + 1`. It allows us not to re-run layout
-              // re-calculation on every animation frame and it helps to achieve smooth animation.
-              // see: https://github.com/kirillzyusko/react-native-keyboard-controller/pull/342
-              paddingBottom: currentKeyboardFrameHeight.value + 1,
-            }
+            // animations become choppy when scrolling to the end of the `ScrollView` (when the last input is focused)
+            // this happens because the layout recalculates on every frame. To avoid this we slightly increase padding
+            // by `+1`. In this way we assure, that `scrollTo` will never scroll to the end, because it uses interpolation
+            // from 0 to `keyboardHeight`, and here our padding is `keyboardHeight + 1`. It allows us not to re-run layout
+            // re-calculation on every animation frame and it helps to achieve smooth animation.
+            // see: https://github.com/kirillzyusko/react-native-keyboard-controller/pull/342
+            paddingBottom: currentKeyboardFrameHeight.value + 1,
+          }
           : {},
       [enabled],
     );

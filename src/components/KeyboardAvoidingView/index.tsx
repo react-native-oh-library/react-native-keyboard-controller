@@ -8,7 +8,7 @@ import Reanimated, {
   useSharedValue,
 } from "react-native-reanimated";
 
-import { useWindowDimensions } from "react-native-keyboard-controller";
+import { useWindowDimensions } from "../../hooks";
 
 import { useKeyboardAnimation } from "./hooks";
 
@@ -105,7 +105,7 @@ const KeyboardAvoidingView = forwardRef<
       );
       const bottomHeight = enabled ? bottom : 0;
 
-      switch (behavior) {
+      switch (behavior)  {
         case "height":
           if (!keyboard.isClosed.value) {
             return {
@@ -121,7 +121,6 @@ const KeyboardAvoidingView = forwardRef<
 
         case "padding":
           return { paddingBottom: bottomHeight };
-
         default:
           return {};
       }

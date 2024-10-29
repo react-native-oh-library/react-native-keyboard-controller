@@ -1,1 +1,11 @@
-{"name":"@react-native-oh-tpl/react-native-keyboard-controller","version":"1.12.7-0.0.3","description":" control keyboard show or hide","main":"Index.ets","author":"","license":"MIT License","dependencies":{"@rnoh/react-native-openharmony":"file:../react_native_openharmony"},"metadata":{"sourceRoots":["./src/main"],"useNormalizedOHMUrl":true},"compatibleSdkVersion":12,"compatibleSdkType":"HarmonyOS","obfuscated":false}
+{
+  "name": "@react-native-oh-tpl/react-native-keyboard-controller",
+  "version": "1.12.7-0.0.4",
+  "description": " control keyboard show or hide",
+  "main": "Index.ets",
+  "author": "",
+  "license": "MIT License",
+  "dependencies": {
+    "@rnoh/react-native-openharmony": "file:../react_native_openharmony",
+  }
+}
