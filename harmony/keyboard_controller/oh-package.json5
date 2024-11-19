@@ -1,6 +1,6 @@
 {
   "name": "@react-native-oh-tpl/react-native-keyboard-controller",
-  "version": "1.12.7-0.0.4",
+  "version": "1.12.7-0.0.5",
   "description": " control keyboard show or hide",
   "main": "Index.ets",
   "author": "",

@@ -40,7 +40,7 @@
 #include  "RNOH/CppComponentInstance.h"
 #include "KeyboardGestureAreaComponentDescriptor.h"
 #include "RNOH/arkui/StackNode.h"
-
+#include "RNOH/arkui/ArkUINodeRegistry.h"
 namespace rnoh {
 
 class KeyboardGestureAreaComponentInstance
