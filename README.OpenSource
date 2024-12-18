@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "react-native-keyboard-controller",
+        "License": "MIT License",
+        "License File": "https://github.com/kirillzyusko/react-native-keyboard-controller/blob/main/LICENSE",
+        "Version Number": "1.12.7",
+        "Owner" : "xiafeng@huawei.com",
+        "Upstream URL": "https://github.com/kirillzyusko/react-native-keyboard-controller",
+        "Description": "Keyboard manager which works in identical way on  iOS and Android and harmony"
+    }
+]
