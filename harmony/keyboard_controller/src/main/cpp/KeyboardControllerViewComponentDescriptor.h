@@ -45,14 +45,14 @@ public:
     KeyboardControllerViewProps(const PropsParserContext &context, const KeyboardControllerViewProps &sourceProps,
                                 const RawProps &rawProps)
         : ViewProps(context, sourceProps, rawProps),
-          enabled(CoreFeatures::enablePropIteratorSetter
+          enabled(true
                       ? sourceProps.enabled
                       : convertRawProp(context, rawProps, "enabled", sourceProps.enabled, {false})),
-          statusBarTranslucent(CoreFeatures::enablePropIteratorSetter
+          statusBarTranslucent(true
                                    ? sourceProps.statusBarTranslucent
                                    : convertRawProp(context, rawProps, "statusBarTranslucent",
                                                     sourceProps.statusBarTranslucent, {false})),
-          navigationBarTranslucent(CoreFeatures::enablePropIteratorSetter
+          navigationBarTranslucent(true
                                        ? sourceProps.navigationBarTranslucent
                                        : convertRawProp(context, rawProps, "navigationBarTranslucent",
                                                         sourceProps.navigationBarTranslucent, {false})) {}

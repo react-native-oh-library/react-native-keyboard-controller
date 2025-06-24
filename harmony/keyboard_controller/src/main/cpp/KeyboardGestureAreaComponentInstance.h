@@ -27,7 +27,6 @@ public:
     {
         // Clean-up code here
         std::cout << "KeyboardGestureAreaComponentInstance destroyed." << std::endl;
-        NativeNodeApi::getInstance()->unregisterNodeEvent(m_stackNode.getArkUINodeHandle(), NODE_TOUCH_EVENT);
         ArkUINodeRegistry::getInstance().unregisterTouchHandler(&m_stackNode);
     }
     void onTouchEvent(ArkUI_UIInputEvent *e) override;

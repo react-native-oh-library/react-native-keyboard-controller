@@ -13,8 +13,6 @@ KeyboardGestureAreaComponentInstance::KeyboardGestureAreaComponentInstance(Conte
     : CppComponentInstance(std::move(context)) {
     DLOG(INFO) << "KeyboardGestureAreaComponentInstance";
     ArkUINodeRegistry::getInstance().registerTouchHandler(&m_stackNode, this);
-    NativeNodeApi::getInstance()->registerNodeEvent(m_stackNode.getArkUINodeHandle(), NODE_TOUCH_EVENT,
-                                                    NODE_TOUCH_EVENT, 0);
 }
 void KeyboardGestureAreaComponentInstance::onTouchEvent(ArkUI_UIInputEvent *e) {
     auto action = OH_ArkUI_UIInputEvent_GetAction(e);

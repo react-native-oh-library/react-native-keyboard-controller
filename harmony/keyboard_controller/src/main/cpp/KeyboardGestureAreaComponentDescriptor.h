@@ -35,14 +35,14 @@ public:
     KeyboardGestureAreaProps(const PropsParserContext &context, const KeyboardGestureAreaProps &sourceProps,
                              const RawProps &rawProps)
         : ViewProps(context, sourceProps, rawProps),
-          showOnSwipeUp(CoreFeatures::enablePropIteratorSetter
+          showOnSwipeUp(true
                             ? sourceProps.showOnSwipeUp
                             : convertRawProp(context, rawProps, "showOnSwipeUp", sourceProps.showOnSwipeUp, {false})),
-          enableSwipeToDismiss(CoreFeatures::enablePropIteratorSetter
+          enableSwipeToDismiss(true
                                    ? sourceProps.enableSwipeToDismiss
                                    : convertRawProp(context, rawProps, "enableSwipeToDismiss",
                                                     sourceProps.enableSwipeToDismiss, {false})),
-          interpolator(CoreFeatures::enablePropIteratorSetter
+          interpolator(true
                            ? sourceProps.interpolator
                            : convertRawProp(context, rawProps, "interpolator", sourceProps.interpolator, {"linear"})) {}
 };
