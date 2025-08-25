@@ -31,7 +31,7 @@ void KeyboardControllerViewComponentInstance::onChildRemoved(ComponentInstance::
 
 void KeyboardControllerViewComponentInstance::onPropsChanged(SharedConcreteProps const &props) {
     DLOG(INFO) << "###onPropsChanged" << props->enabled << props->statusBarTranslucent
-               << props->navigationBarTranslucent;
+               << props->navigationBarTranslucent << props->preserveEdgeToEdge;
     CppComponentInstance::onPropsChanged(props);
     if (this->enabled != props->enabled) {
         this->enabled = props->enabled;
@@ -44,6 +44,10 @@ void KeyboardControllerViewComponentInstance::onPropsChanged(SharedConcreteProps
     if (this->statusBarTranslucent != props->statusBarTranslucent) {
         this->statusBarTranslucent = props->statusBarTranslucent;
         this->setWindowSystemBarEnable();
+    }
+    if (this->preserveEdgeToEdge != props->preserveEdgeToEdge) {
+        this->preserveEdgeToEdge = props->preserveEdgeToEdge;
+        this->setWindowLayoutFullScreen();
     }
 }
 
@@ -90,6 +94,7 @@ void KeyboardControllerViewComponentInstance::startKeyboardObserver() {
     }
 }
 
+
 void KeyboardControllerViewComponentInstance::keyboardHeightChangeHandle() {
     auto rnInstancePtr = this->m_deps->rnInstance.lock();
     if (rnInstancePtr != nullptr && this->enabled) {
@@ -106,6 +111,15 @@ void KeyboardControllerViewComponentInstance::keyboardHeightChangeHandle() {
              m_eventEmitter->onKeyboardMove(end);
             m_eventEmitter->onKeyboardMoveEnd(end);
         }
+    }
+}
+
+void KeyboardControllerViewComponentInstance::setWindowLayoutFullScreen() {
+    auto rnInstancePtr = this->m_deps->rnInstance.lock();
+    if (rnInstancePtr != nullptr) {
+        auto turboModule = rnInstancePtr->getTurboModule("KeyboardController");
+        auto arkTsTurboModule = std::dynamic_pointer_cast<rnoh::ArkTSTurboModule>(turboModule);
+        arkTsTurboModule->callSync("setWindowLayoutFullScreen", {this->preserveEdgeToEdge});
     }
 }
 

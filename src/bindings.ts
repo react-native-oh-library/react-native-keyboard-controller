@@ -2,16 +2,18 @@ import { View } from "react-native";
 
 import type {
   FocusedInputEventsModule,
-  KeyboardControllerModule,
+  KeyboardControllerNativeModule,
   KeyboardControllerProps,
   KeyboardEventsModule,
   KeyboardGestureAreaProps,
+  OverKeyboardViewProps,
   WindowDimensionsEventsModule,
 } from "./types";
 import type { EmitterSubscription } from "react-native";
 
 const NOOP = () => {};
-export const KeyboardController: KeyboardControllerModule = {
+
+export const KeyboardControllerNative: KeyboardControllerNativeModule = {
   setDefaultMode: NOOP,
   setInputMode: NOOP,
   dismiss: NOOP,
@@ -36,3 +38,5 @@ export const KeyboardControllerView =
   View as unknown as React.FC<KeyboardControllerProps>;
 export const KeyboardGestureArea =
   View as unknown as React.FC<KeyboardGestureAreaProps>;
+export const RCTOverKeyboardView =
+  View as unknown as React.FC<OverKeyboardViewProps>;

@@ -35,16 +35,10 @@ public:
     KeyboardGestureAreaProps(const PropsParserContext &context, const KeyboardGestureAreaProps &sourceProps,
                              const RawProps &rawProps)
         : ViewProps(context, sourceProps, rawProps),
-          showOnSwipeUp(CoreFeatures::enablePropIteratorSetter
-                            ? sourceProps.showOnSwipeUp
-                            : convertRawProp(context, rawProps, "showOnSwipeUp", sourceProps.showOnSwipeUp, {false})),
-          enableSwipeToDismiss(CoreFeatures::enablePropIteratorSetter
-                                   ? sourceProps.enableSwipeToDismiss
-                                   : convertRawProp(context, rawProps, "enableSwipeToDismiss",
+          showOnSwipeUp(convertRawProp(context, rawProps, "showOnSwipeUp", sourceProps.showOnSwipeUp, {false})),
+          enableSwipeToDismiss(convertRawProp(context, rawProps, "enableSwipeToDismiss",
                                                     sourceProps.enableSwipeToDismiss, {false})),
-          interpolator(CoreFeatures::enablePropIteratorSetter
-                           ? sourceProps.interpolator
-                           : convertRawProp(context, rawProps, "interpolator", sourceProps.interpolator, {"linear"})) {}
+          interpolator(convertRawProp(context, rawProps, "interpolator", sourceProps.interpolator, {"linear"})) {}
 };
 
 using KeyboardGestureAreaShadowNode =

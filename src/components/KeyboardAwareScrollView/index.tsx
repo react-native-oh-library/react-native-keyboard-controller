@@ -27,6 +27,7 @@ import type {
 import type {
   FocusedInputLayoutChangedEvent,
   FocusedInputSelectionChangedEvent,
+  NativeEvent,
 } from "..//../types";
 
 export type KeyboardAwareScrollViewProps = {
@@ -38,6 +39,8 @@ export type KeyboardAwareScrollViewProps = {
   enabled?: boolean;
   /** Adjusting the bottom spacing of KeyboardAwareScrollView. Default is `0` */
   extraKeyboardSpace?: number;
+  /** Custom component for `ScrollView`. Default is `ScrollView` */
+  ScrollViewComponent?: React.ComponentType<ScrollViewProps>;
 } & ScrollViewProps;
 
 /*
@@ -90,6 +93,7 @@ const KeyboardAwareScrollView = forwardRef<
       disableScrollOnKeyboardHide = false,
       enabled = true,
       extraKeyboardSpace = 0,
+      ScrollViewComponent = Reanimated.ScrollView,
       ...rest
     },
     ref,
@@ -184,6 +188,21 @@ const KeyboardAwareScrollView = forwardRef<
         return 0;
       },
       [bottomOffset, enabled, height, rest.snapToOffsets],
+    );
+
+    const syncKeyboardFrame = useCallback(
+      (e: NativeEvent) => {
+        "worklet";
+
+        const keyboardFrame = interpolate(
+          e.height,
+          [0, keyboardHeight.value],
+          [0, keyboardHeight.value + extraKeyboardSpace],
+        );
+
+        currentKeyboardFrameHeight.value = keyboardFrame;
+      },
+      [extraKeyboardSpace],
     );
 
     const scrollFromCurrentPosition = useCallback(
@@ -301,12 +320,7 @@ const KeyboardAwareScrollView = forwardRef<
         onMove: (e) => {
           "worklet";
 
-          const keyboardFrame = interpolate(
-            e.height,
-            [0, keyboardHeight.value],
-            [0, keyboardHeight.value + extraKeyboardSpace],
-          );
-          currentKeyboardFrameHeight.value = keyboardFrame;
+          syncKeyboardFrame(e);
 
           // if the user has set disableScrollOnKeyboardHide, only auto-scroll when the keyboard opens
           if (!disableScrollOnKeyboardHide || keyboardWillAppear.value) {
@@ -318,9 +332,11 @@ const KeyboardAwareScrollView = forwardRef<
 
           keyboardHeight.value = e.height;
           scrollPosition.value = position.value;
+
+          syncKeyboardFrame(e);
         },
       },
-      [maybeScroll, disableScrollOnKeyboardHide, extraKeyboardSpace],
+      [maybeScroll, disableScrollOnKeyboardHide, syncKeyboardFrame],
     );
 
     useAnimatedReaction(
@@ -357,7 +373,7 @@ const KeyboardAwareScrollView = forwardRef<
     );
 
     return (
-      <Reanimated.ScrollView
+      <ScrollViewComponent
         ref={onRef}
         {...rest}
         onLayout={onScrollViewLayout}
@@ -365,7 +381,7 @@ const KeyboardAwareScrollView = forwardRef<
       >
         {children}
         <Reanimated.View style={view} />
-      </Reanimated.ScrollView>
+      </ScrollViewComponent>
     );
   },
 );

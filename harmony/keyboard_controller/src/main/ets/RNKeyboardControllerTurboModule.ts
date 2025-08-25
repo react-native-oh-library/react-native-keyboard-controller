@@ -12,6 +12,7 @@ import Logger from './Logger';
 import { KeyboardControllerEventName, KeyboardStatusType } from './Type';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { JSON } from '@kit.ArkTS';
+import { ConfigurationConstant } from '@kit.AbilityKit';
 
 declare function px2vp(px: number): number;
 
@@ -22,7 +23,7 @@ interface RNKeyboardControllerSpec {
 
   setDefaultMode(): void;
 
-  dismiss(): void;
+  dismiss(keepFocus: boolean): void;
 
   setFocusTo(direction: string): void;
 
@@ -58,7 +59,7 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
   /**
    * @description 键盘隐藏
    * */
-  dismiss(): void {
+  dismiss(keepFocus: boolean): void {
     let inputMethodController = inputMethod.getController();
     inputMethodController.stopInputSession()
 
@@ -144,7 +145,8 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
         timestamp: new Date().getTime(),
         target: 0,
         height: height,
-        tag:0
+        tag:0,
+        appearance:this.getKeyboardAppearance()
       });
     }
     if (this.keyboardStatus == KeyboardStatusType.SHOW) {
@@ -156,7 +158,8 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
         timestamp: new Date().getTime(),
         target: 0,
         height:height,
-        tag:0
+        tag:0,
+        appearance:this.getKeyboardAppearance()
       });
     }
   }
@@ -207,4 +210,29 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
 
   }
 
+  private getKeyboardAppearance(): String {
+    const colorMode = this.context.config.colorMode;
+    if (colorMode == ConfigurationConstant.ColorMode.COLOR_MODE_DARK) {
+      return "dark";
+    }
+    else if (colorMode == ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT) {
+      return "light";
+    }
+    return "default";
+  }
+
+  private async setWindowLayoutFullScreen(preserveEdgeToEdge:boolean){
+    let windowInstance: window.Window | undefined = undefined;
+    windowInstance = await window.getLastWindow(this.context);
+    try {
+      let promise = windowInstance.setWindowLayoutFullScreen(preserveEdgeToEdge);
+      promise.then(() => {
+        Logger.info('Succeeded in setWindowLayoutFullScreen .' + preserveEdgeToEdge);
+      }).catch((err: BusinessError) => {
+        Logger.error(`Failed to setWindowLayoutFullScreen. Cause code: ${err.code}, message: ${err.message}`);
+      });
+    } catch (exception) {
+      Logger.error(`Failed to setWindowLayoutFullScreen. Cause code: ${exception.code}, message: ${exception.message}`);
+    }
+  }
 }

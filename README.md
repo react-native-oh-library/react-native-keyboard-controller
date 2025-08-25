@@ -1,6 +1,6 @@
-# @react-native-oh-tpl/react-native-keyboard-controller
+# @react-native-ohos/react-native-keyboard-controller
 
-本项目基于 [react-native-keyboard-controller (原库NPM包名)](https://github.com/kirillzyusko/react-native-keyboard-controller)
+本项目基于 [react-native-keyboard-controller@v1.16.5](https://github.com/kirillzyusko/react-native-keyboard-controller/tree/1.16.5)
 
 ## 文档地址 / Documentation URL 
 

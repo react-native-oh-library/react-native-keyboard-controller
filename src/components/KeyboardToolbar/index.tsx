@@ -5,7 +5,7 @@ import {
   FocusedInputEvents,
 } from "../../bindings";
 import KeyboardStickyView from "../KeyboardStickyView"
-import { KeyboardController } from "../../bindings";
+import { KeyboardControllerNative } from "../../bindings";
 import useColorScheme from "../hooks/useColorScheme";
 
 import Arrow from "./Arrow";
@@ -13,9 +13,14 @@ import Button from "./Button";
 import { colors } from "./colors";
 
 import type { HEX, KeyboardToolbarTheme } from "./types";
+import type { KeyboardStickyViewProps } from "../KeyboardStickyView";
 import type { ReactNode } from "react";
+import type { ViewProps } from "react-native";
 
-export type KeyboardToolbarProps = {
+export type KeyboardToolbarProps = Omit<
+  ViewProps,
+  "style" | "testID" | "children"
+> & {
   /** An element that is shown in the middle of the toolbar. */
   content?: JSX.Element | null;
   /** A set of dark/light colors consumed by toolbar component. */
@@ -51,7 +56,8 @@ export type KeyboardToolbarProps = {
    * A value for container opacity in hexadecimal format (e.g. `ff`). Default value is `ff`.
    */
   opacity?: HEX;
-};
+} & Pick<KeyboardStickyViewProps, "offset" | "enabled">;
+
 const TEST_ID_KEYBOARD_TOOLBAR = "keyboard.toolbar";
 const TEST_ID_KEYBOARD_TOOLBAR_PREVIOUS = `${TEST_ID_KEYBOARD_TOOLBAR}.previous`;
 const TEST_ID_KEYBOARD_TOOLBAR_NEXT = `${TEST_ID_KEYBOARD_TOOLBAR}.next`;
@@ -60,11 +66,10 @@ const TEST_ID_KEYBOARD_TOOLBAR_DONE = `${TEST_ID_KEYBOARD_TOOLBAR}.done`;
 
 const KEYBOARD_TOOLBAR_HEIGHT = 42;
 const DEFAULT_OPACITY: HEX = "FF";
-const offset = { closed: KEYBOARD_TOOLBAR_HEIGHT };
 
-const dismissKeyboard = () => KeyboardController.dismiss();
-const goToNextField = () => KeyboardController.setFocusTo("next");
-const goToPrevField = () => KeyboardController.setFocusTo("prev");
+const dismissKeyboard = () => KeyboardControllerNative.dismiss(false);
+const goToNextField = () => KeyboardControllerNative.setFocusTo("next");
+const goToPrevField = () => KeyboardControllerNative.setFocusTo("prev");
 
 /**
  * `KeyboardToolbar` is a component that is shown above the keyboard with `Prev`/`Next` and
@@ -82,6 +87,9 @@ const KeyboardToolbar: React.FC<KeyboardToolbarProps> = ({
   onDoneCallback,
   blur = null,
   opacity = DEFAULT_OPACITY,
+  offset: { closed = 0, opened = 0 } = {},
+  enabled = true,
+  ...rest
 }) => {
   const colorScheme = useColorScheme();
   const [inputs, setInputs] = useState({
@@ -111,6 +119,10 @@ const KeyboardToolbar: React.FC<KeyboardToolbarProps> = ({
     ],
     [colorScheme, opacity, theme],
   );
+  const offset = useMemo(
+    () => ({ closed: closed + KEYBOARD_TOOLBAR_HEIGHT, opened }),
+    [closed, opened],
+  );
   const ButtonContainer = button || Button;
   const IconContainer = icon || Arrow;
 
@@ -128,8 +140,8 @@ const KeyboardToolbar: React.FC<KeyboardToolbarProps> = ({
   }, [onDoneCallback]);
 
   return (
-    <KeyboardStickyView offset={offset}>
-      <View style={toolbarStyle} testID={TEST_ID_KEYBOARD_TOOLBAR}>
+    <KeyboardStickyView enabled={enabled} offset={offset}>
+      <View {...rest} style={toolbarStyle} testID={TEST_ID_KEYBOARD_TOOLBAR}>
         {blur}
         {showArrows && (
           <>

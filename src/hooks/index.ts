@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-import { KeyboardController } from "../bindings";
 import { AndroidSoftInputModes } from "../constants";
 import { useKeyboardContext } from "../context";
 import { uuid } from "../utils";
+import { KeyboardController } from "../module";
 
 import type { AnimatedContext, ReanimatedContext } from "../context";
 import type { FocusedInputHandler, KeyboardHandler } from "../types";

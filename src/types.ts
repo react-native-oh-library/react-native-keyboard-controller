@@ -1,6 +1,8 @@
+import type { PropsWithChildren } from "react";
 import type {
   EmitterSubscription,
   NativeSyntheticEvent,
+  TextInputProps,
   ViewProps,
 } from "react-native";
 
@@ -85,11 +87,12 @@ export type KeyboardControllerProps = {
   // props
   statusBarTranslucent?: boolean;
   navigationBarTranslucent?: boolean;
+  preserveEdgeToEdge?: boolean;
   enabled?: boolean;
 } & ViewProps;
 
 export type KeyboardGestureAreaProps = {
-  interpolator: "ios" | "linear";
+  interpolator?: "ios" | "linear";
   /**
    * Whether to allow to show a keyboard from dismissed state by swipe up.
    * Default to `false`.
@@ -101,15 +104,42 @@ export type KeyboardGestureAreaProps = {
    * Defaults to `true`.
    */
   enableSwipeToDismiss?: boolean;
+  /**
+   * Extra distance to the keyboard.
+   */
+  offset?: number;
+  /**
+   * A corresponding `nativeID` value from the corresponding `TextInput`.
+   */
+  textInputNativeID?: string;
 } & ViewProps;
 
+export type OverKeyboardViewProps = PropsWithChildren<{
+  visible: boolean;
+}>;
+
 export type Direction = "next" | "prev" | "current";
+export type DismissOptions = {
+  keepFocus: boolean;
+};
 export type KeyboardControllerModule = {
   // android only
   setDefaultMode: () => void;
   setInputMode: (mode: number) => void;
   // all platforms
-  dismiss: () => void;
+  dismiss: (options?: DismissOptions) => Promise<void>;
+  setFocusTo: (direction: Direction) => void;
+  isVisible: () => boolean;
+  state: () => KeyboardEventData | null;
+  addListener: (eventName: string) => void;
+  removeListeners: (count: number) => void;
+};
+export type KeyboardControllerNativeModule = {
+  // android only
+  setDefaultMode: () => void;
+  setInputMode: (mode: number) => void;
+  // all platforms
+  dismiss: (keepFocus: boolean) => void;
   setFocusTo: (direction: Direction) => void;
   // native event module stuff
   addListener: (eventName: string) => void;
@@ -127,6 +157,8 @@ export type KeyboardEventData = {
   duration: number;
   timestamp: number;
   target: number;
+  type: NonNullable<TextInputProps["keyboardType"]>;
+  appearance: NonNullable<TextInputProps["keyboardAppearance"]>;
 };
 export type KeyboardEventsModule = {
   addListener: (

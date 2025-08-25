@@ -13,8 +13,6 @@ KeyboardGestureAreaComponentInstance::KeyboardGestureAreaComponentInstance(Conte
     : CppComponentInstance(std::move(context)) {
     DLOG(INFO) << "KeyboardGestureAreaComponentInstance";
     ArkUINodeRegistry::getInstance().registerTouchHandler(&m_stackNode, this);
-    NativeNodeApi::getInstance()->registerNodeEvent(m_stackNode.getArkUINodeHandle(), NODE_TOUCH_EVENT,
-                                                    NODE_TOUCH_EVENT, 0);
 }
 void KeyboardGestureAreaComponentInstance::onTouchEvent(ArkUI_UIInputEvent *e) {
     auto action = OH_ArkUI_UIInputEvent_GetAction(e);
@@ -67,7 +65,7 @@ void KeyboardGestureAreaComponentInstance::swipeToDismiss() {
     if (rnInstancePtr != nullptr) {
         auto turboModule = rnInstancePtr->getTurboModule("KeyboardController");
         auto arkTsTurboModule = std::dynamic_pointer_cast<rnoh::ArkTSTurboModule>(turboModule);
-        arkTsTurboModule->callSync("dismiss", {});
+        arkTsTurboModule->callSync("dismiss", {false});
     }
 }
 void KeyboardGestureAreaComponentInstance::swipeToUp() {
