@@ -55,6 +55,7 @@ private:
     bool enabled;
     bool statusBarTranslucent;
     bool navigationBarTranslucent;
+    bool preserveEdgeToEdge = true;
     double keyboardHeight;
     std::map<std::string, std::any> dictionary;
     int keyboardStatus;
@@ -66,6 +67,7 @@ private:
     void startKeyboardObserver();
     void closeKeyboardObserver();
     void keyboardHeightChangeHandle();
+    void setWindowLayoutFullScreen();
 };
 } // namespace rnoh
 

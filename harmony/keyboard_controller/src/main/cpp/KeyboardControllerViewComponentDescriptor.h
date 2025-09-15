@@ -40,22 +40,18 @@ public:
     bool enabled;
     bool statusBarTranslucent;
     bool navigationBarTranslucent;
+    bool preserveEdgeToEdge;
     KeyboardControllerViewProps() = default;
 
     KeyboardControllerViewProps(const PropsParserContext &context, const KeyboardControllerViewProps &sourceProps,
                                 const RawProps &rawProps)
         : ViewProps(context, sourceProps, rawProps),
-          enabled(CoreFeatures::enablePropIteratorSetter
-                      ? sourceProps.enabled
-                      : convertRawProp(context, rawProps, "enabled", sourceProps.enabled, {false})),
-          statusBarTranslucent(CoreFeatures::enablePropIteratorSetter
-                                   ? sourceProps.statusBarTranslucent
-                                   : convertRawProp(context, rawProps, "statusBarTranslucent",
+          enabled(convertRawProp(context, rawProps, "enabled", sourceProps.enabled, {false})),
+          statusBarTranslucent(convertRawProp(context, rawProps, "statusBarTranslucent",
                                                     sourceProps.statusBarTranslucent, {false})),
-          navigationBarTranslucent(CoreFeatures::enablePropIteratorSetter
-                                       ? sourceProps.navigationBarTranslucent
-                                       : convertRawProp(context, rawProps, "navigationBarTranslucent",
-                                                        sourceProps.navigationBarTranslucent, {false})) {}
+          navigationBarTranslucent(convertRawProp(context, rawProps, "navigationBarTranslucent",
+                                                        sourceProps.navigationBarTranslucent, {false})),
+          preserveEdgeToEdge(convertRawProp(context, rawProps, "preserveEdgeToEdge", sourceProps.preserveEdgeToEdge, {true})){}
 };
 
 using KeyboardControllerViewShadowNode =

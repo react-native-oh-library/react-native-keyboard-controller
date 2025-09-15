@@ -2,10 +2,11 @@ import { NativeEventEmitter, Platform } from "react-native";
 
 import type {
   FocusedInputEventsModule,
-  KeyboardControllerModule,
+  KeyboardControllerNativeModule,
   KeyboardControllerProps,
   KeyboardEventsModule,
   KeyboardGestureAreaProps,
+  OverKeyboardViewProps,
   WindowDimensionsEventsModule,
 } from "./types";
 
@@ -17,7 +18,8 @@ const LINKING_ERROR =
 
 const RCTKeyboardController =
   require("./specs/NativeKeyboardController").default;
-export const KeyboardController = (
+
+export const KeyboardControllerNative = (
   RCTKeyboardController
     ? RCTKeyboardController
     : new Proxy(
@@ -28,15 +30,16 @@ export const KeyboardController = (
           },
         },
       )
-) as KeyboardControllerModule;
+) as KeyboardControllerNativeModule;
 
 const KEYBOARD_CONTROLLER_NAMESPACE = "KeyboardController::";
-const eventEmitter = new NativeEventEmitter(KeyboardController);
+const eventEmitter = new NativeEventEmitter(KeyboardControllerNative);
 
 export const KeyboardEvents: KeyboardEventsModule = {
   addListener: (name, cb) =>
     eventEmitter.addListener(KEYBOARD_CONTROLLER_NAMESPACE + name, cb),
 };
+
 /**
  * This API is not documented, it's for internal usage only (for now), and is a subject to potential breaking changes in future.
  * Use it with cautious.
@@ -52,6 +55,8 @@ export const WindowDimensionsEvents: WindowDimensionsEventsModule = {
 export const KeyboardControllerView: React.FC<KeyboardControllerProps> =
   require("./specs/KeyboardControllerViewNativeComponent").default;
 export const KeyboardGestureArea: React.FC<KeyboardGestureAreaProps> =
-  Platform.OS === "android" && Platform.Version >= 30
+  (Platform.OS === "android" && Platform.Version >= 30) || Platform.OS === "ios"
     ? require("./specs/KeyboardGestureAreaNativeComponent").default
     : ({ children }: KeyboardGestureAreaProps) => children;
+export const RCTOverKeyboardView: React.FC<OverKeyboardViewProps> =
+  require("./specs/OverKeyboardViewNativeComponent").default;

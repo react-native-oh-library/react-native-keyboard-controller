@@ -27,11 +27,14 @@ export type KeyboardAnimationContext = {
   setEnabled: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const NOOP = () => {};
+const NESTED_NOOP = () => NOOP;
 const withSharedValue = <T>(value: T): SharedValue<T> => ({
   value,
   addListener: NOOP,
   removeListener: NOOP,
   modify: NOOP,
+  get: () => value,
+  set: NOOP,
 });
 const DEFAULT_SHARED_VALUE = withSharedValue(0);
 const DEFAULT_LAYOUT = withSharedValue<FocusedInputLayoutChangedEvent | null>(
@@ -48,8 +51,8 @@ const defaultContext: KeyboardAnimationContext = {
     height: DEFAULT_SHARED_VALUE,
   },
   layout: DEFAULT_LAYOUT,
-  setKeyboardHandlers: NOOP,
-  setInputHandlers: NOOP,
+  setKeyboardHandlers: NESTED_NOOP,
+  setInputHandlers: NESTED_NOOP,
   setEnabled: NOOP,
 };
 export const KeyboardContext = createContext(defaultContext);

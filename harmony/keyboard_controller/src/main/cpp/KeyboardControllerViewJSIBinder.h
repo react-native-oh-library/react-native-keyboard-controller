@@ -17,6 +17,7 @@ protected:
         object.setProperty(rt, "enabled", "bool");
         object.setProperty(rt, "statusBarTranslucent", "bool");
         object.setProperty(rt, "navigationBarTranslucent", "bool");
+        object.setProperty(rt, "preserveEdgeToEdge", "bool");
         return object;
     }
 
