@@ -89,7 +89,7 @@ export const KeyboardProvider = ({
   children,
   statusBarTranslucent,
   navigationBarTranslucent,
-  preserveEdgeToEdge = true,
+  preserveEdgeToEdge,
   enabled: initiallyEnabled = true,
 }: KeyboardProviderProps) => {
   // state
@@ -237,8 +237,7 @@ export const KeyboardProvider = ({
         preserveEdgeToEdge={preserveEdgeToEdge}
         style={styles.container}
       >
-        <Reanimated.View>{children}</Reanimated.View>
-        {/* {children} */}
+        {children}
       </KeyboardControllerViewAnimated>
       <Animated.View
         // we are using this small hack, because if the component (where
