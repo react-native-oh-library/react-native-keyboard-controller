@@ -1,6 +1,6 @@
 {
   "name": "@react-native-ohos/react-native-keyboard-controller",
-  "version": "1.16.5",
+  "version": "1.16.6-rc.1",
   "description": " control keyboard show or hide",
   "main": "Index.ets",
   "author": "",
