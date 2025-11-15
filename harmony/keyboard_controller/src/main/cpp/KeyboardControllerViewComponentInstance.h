@@ -55,7 +55,7 @@ private:
     bool enabled;
     bool statusBarTranslucent;
     bool navigationBarTranslucent;
-    bool preserveEdgeToEdge = true;
+    bool preserveEdgeToEdge;
     double keyboardHeight;
     std::map<std::string, std::any> dictionary;
     int keyboardStatus;

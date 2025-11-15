@@ -51,7 +51,7 @@ public:
                                                     sourceProps.statusBarTranslucent, {false})),
           navigationBarTranslucent(convertRawProp(context, rawProps, "navigationBarTranslucent",
                                                         sourceProps.navigationBarTranslucent, {false})),
-          preserveEdgeToEdge(convertRawProp(context, rawProps, "preserveEdgeToEdge", sourceProps.preserveEdgeToEdge, {true})){}
+          preserveEdgeToEdge(convertRawProp(context, rawProps, "preserveEdgeToEdge", sourceProps.preserveEdgeToEdge, {false})){}
 };
 
 using KeyboardControllerViewShadowNode =
