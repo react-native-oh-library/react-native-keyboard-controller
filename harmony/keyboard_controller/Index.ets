@@ -4,4 +4,6 @@
  * found in the LICENSE file.
  */
 
+import { RNKeyboardControllerPackage } from './src/main/ets/RNKeyboardControllerPackage'
 export * from './ts';
+export default RNKeyboardControllerPackage

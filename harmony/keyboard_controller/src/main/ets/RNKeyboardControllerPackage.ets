@@ -4,10 +4,11 @@
  * found in the LICENSE file.
  */
 
-import {RNPackage,TurboModulesFactory} from  '@rnoh/react-native-openharmony/ts';
+import {TurboModulesFactory} from  '@rnoh/react-native-openharmony/ts';
 import type { TurboModule, TurboModuleContext, } from '@rnoh/react-native-openharmony/ts';
 import {RNKeyboardControllerTurboModule} from  './RNKeyboardControllerTurboModule';
 import {RNStatusBarManagerCompatTurboModule} from './RNStatusBarManagerCompatTurboModule';
+import { RNOHPackage } from '@rnoh/react-native-openharmony'
 
 class RNKeyboardControllerTurboModuleFactory extends TurboModulesFactory {
   createTurboModule(name: string): TurboModule | null {
@@ -33,12 +34,12 @@ class RNStatusBarManagerCompatTurboModuleFactory extends TurboModulesFactory {
   }
 }
 
-export  class  RNKeyboardControllerPackage extends RNPackage {
+export  class  RNKeyboardControllerPackage extends RNOHPackage {
   createTurboModulesFactory(ctx: TurboModuleContext): TurboModulesFactory {
      return new RNKeyboardControllerTurboModuleFactory(ctx);
   }
 }
-export  class  RNStatusBarManagerCompatPackage extends RNPackage {
+export  class  RNStatusBarManagerCompatPackage extends RNOHPackage {
   createTurboModulesFactory(ctx: TurboModuleContext): TurboModulesFactory {
     return new RNStatusBarManagerCompatTurboModuleFactory(ctx);
   }
