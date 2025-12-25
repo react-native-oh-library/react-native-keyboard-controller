@@ -227,7 +227,7 @@ export const KeyboardProvider = ({
         statusBarTranslucent={statusBarTranslucent}
         style={styles.container}
       >
-        <Reanimated.View>{children}</Reanimated.View>
+        <Reanimated.View style={styles.container}>{children}</Reanimated.View>
         {/* {children} */}
       </KeyboardControllerViewAnimated>
       <Animated.View
