@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Animated, Platform, StyleSheet } from "react-native";
-import Reanimated, { useSharedValue } from "react-native-reanimated";
+import Reanimated, { useSharedValue, Easing, withTiming } from "react-native-reanimated";
 
 import { KeyboardControllerView } from "./bindings";
 import { KeyboardContext } from "./context";
@@ -100,7 +100,7 @@ export const KeyboardProvider = ({
   const context = useMemo<KeyboardAnimationContext>(
     () => ({
       enabled,
-      animated: { progress: progress, height: Animated.multiply(height,-1)  },
+      animated: { progress: progress, height: Animated.multiply(height, -1) },
       reanimated: { progress: progressSV, height: heightSV },
       layout,
       setKeyboardHandlers,
@@ -127,7 +127,7 @@ export const KeyboardProvider = ({
             },
           },
         ],
-        { useNativeDriver:Platform.OS as string=='harmony'?false:true },
+        { useNativeDriver: Platform.OS as string == 'harmony' ? false : true },
       ),
     [],
   );
@@ -137,8 +137,15 @@ export const KeyboardProvider = ({
 
     if (platforms.includes(OS)) {
       // eslint-disable-next-line react-compiler/react-compiler
-      progressSV.value = event.progress;
-      heightSV.value = -event.height;
+      if (Platform.OS as string == 'harmony') {
+        const dur = 460
+        progressSV.value = withTiming(event.progress, { duration: dur, easing: Easing.out(Easing.exp) });
+        heightSV.value = withTiming(-event.height, { duration: dur, easing: Easing.out(Easing.exp) });
+      } else {
+        progressSV.value = event.progress;
+        heightSV.value = -event.height;
+
+      }
     }
   };
   const keyboardHandler = useAnimatedKeyboardHandler(
@@ -219,7 +226,7 @@ export const KeyboardProvider = ({
         onKeyboardMoveStart={OS === "ios" ? onKeyboardMove : undefined}
         onKeyboardMove={OS === "android" ? onKeyboardMove : undefined}
         onKeyboardMoveInteractive={onKeyboardMove}
-        onKeyboardMoveEnd={ OS as string === "harmony"?onKeyboardMove:undefined}
+        onKeyboardMoveEnd={OS as string === "harmony" ? onKeyboardMove : undefined}
         onFocusedInputLayoutChangedReanimated={inputLayoutHandler}
         onFocusedInputTextChangedReanimated={inputTextHandler}
         onFocusedInputSelectionChangedReanimated={inputSelectionHandler}
