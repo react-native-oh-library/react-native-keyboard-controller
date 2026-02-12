@@ -12,13 +12,16 @@ import { RNOHPackage } from '@rnoh/react-native-openharmony'
 
 class RNKeyboardControllerTurboModuleFactory extends TurboModulesFactory {
   createTurboModule(name: string): TurboModule | null {
-    if (this.hasTurboModule(name)) {
+    if (name === 'KeyboardController') {
       return new RNKeyboardControllerTurboModule(this.ctx);
+    } else if (name === 'StatusBarManagerCompat') {
+      return new RNStatusBarManagerCompatTurboModule(this.ctx);
     }
     return null;
   }
+  
   hasTurboModule(name: string): boolean {
-    return name === 'KeyboardController';
+    return name === 'KeyboardController' || name === 'StatusBarManagerCompat';
   }
 
 }
