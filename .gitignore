@@ -80,3 +80,9 @@ lib/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+harmony/keyboard_controller/oh_modules/
+harmony/keyboard_controller/build/
+*.tgz
+harmony/keyboard_controller/BuildProfile.ets
+package-lock.json
+harmony/keyboard_controller/oh-package-lock.json5
