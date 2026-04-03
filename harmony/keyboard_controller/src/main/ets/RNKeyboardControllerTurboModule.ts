@@ -60,10 +60,24 @@ export class RNKeyboardControllerTurboModule extends TurboModule implements RNKe
   private eventListeners: KeyboardControllerEventName[];
   private currentWindow:window.Window;
   private enabled:boolean;
+  private cleanUpCallbacks: (() => void)[] = [];
   constructor(ctx) {
     super(ctx);
     this.context = this.ctx.uiAbilityContext;
     this.eventListeners = this.supportListeners();
+
+    // 订阅 C++ 层发来的 focusDidSet 消息
+    this.cleanUpCallbacks.push(
+      this.ctx.rnInstance.cppEventEmitter.subscribe("focusDidSet", (payload: { current: number, count: number }) => {
+        Logger.info('###turboModule received focusDidSet from cpp', String(payload.current) + ',' + String(payload.count));
+        if (this.eventListeners.includes(KeyboardControllerEventName.FOCUS_DID_SET)) {
+          this.ctx.rnInstance.emitDeviceEvent(KeyboardControllerEventName.FOCUS_DID_SET, {
+            current: payload.current,
+            count: payload.count
+          });
+        }
+      })
+    );
   }
 
   readonly getConstants: () => {};
