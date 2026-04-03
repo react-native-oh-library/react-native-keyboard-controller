@@ -39,6 +39,7 @@
 #include "RNOH/ArkTSMessageHub.h"
 #include "RNOH/arkui/TextInputNode.h"
 #include "RNOH/arkui/TextAreaNode.h"
+#include "ViewHierarchyNavigator.h"
 
 namespace rnoh {
 enum KeyboardControllerStatus { HIDE = 0, SHOW = 1 };
@@ -89,6 +90,8 @@ private:
     void closeKeyboardObserver();
     void keyboardHeightChangeHandle();
     void setWindowLayoutFullScreen();
+    void setFocusTo(const std::string& direction);
+    void focusDidSet();
 };
 } // namespace rnoh
 

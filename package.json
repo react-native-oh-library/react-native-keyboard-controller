@@ -68,14 +68,14 @@
   "bugs": {
     "url": "https://github.com/react-native-oh-library/react-native-keyboard-controller/issues"
   },
-  "homepage": "https://github.com/react-native-oh-library/react-native-keyboard-controller/tree/br_rnoh0.77#readme",
+  "homepage": "https://github.com/react-native-oh-library/react-native-keyboard-controller/tree/br_rnoh0.82#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",
-    "@react-native/babel-preset": "0.77.0",
-    "@react-native/eslint-config": "0.77.0",
+    "@react-native/babel-preset": "0.82.0",
+    "@react-native/eslint-config": "0.82.0",
     "@release-it/conventional-changelog": "^2.0.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/jest": "^29.5.13",
@@ -99,7 +99,7 @@
     "pod-install": "^0.1.0",
     "prettier": "^2.8.8",
     "react": "18.3.1",
-    "react-native": "0.77.1",
+    "react-native": "0.82.1",
     "react-native-builder-bob": "^0.18.0",
     "react-native-reanimated": "3.18.0",
     "react-test-renderer": "18.2.0",
