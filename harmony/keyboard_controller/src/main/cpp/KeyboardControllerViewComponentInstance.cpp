@@ -28,6 +28,7 @@
 #include "KeyboardControllerViewComponentInstance.h"
 #include <folly/dynamic.h>
 #include <iostream>
+#include <arkui/native_interface_focus.h>
 
 namespace rnoh {
 using KeyboardControllerStatus = rnoh::KeyboardControllerStatus;
@@ -83,6 +84,15 @@ void KeyboardControllerViewComponentInstance::onMessageReceived(ArkTSMessage con
         if (height > 0) {
             this->keyboardStatus = KeyboardControllerStatus::SHOW;
             this->keyboardHeight = height;
+
+            if (this->textInputVector.size() == 0) {
+                this->focusDidSet();
+                auto textInputVectorTemp = ViewHierarchyNavigator::getAllInputFields(this->shared_from_this());
+                for (size_t i = 0; i < textInputVectorTemp.size(); ++i) {
+                    auto &input = textInputVectorTemp[i];
+                    findTextInputComponents(input);
+                }
+            }
         }
         if (height == 0) {
             this->keyboardStatus = KeyboardControllerStatus::HIDE;
@@ -90,7 +100,8 @@ void KeyboardControllerViewComponentInstance::onMessageReceived(ArkTSMessage con
         this->keyboardHeightChangeHandle();
     }
     if (message.name == "setFocusTo") {
-        // to do
+        std::string direction = message.payload.getString();
+        this->setFocusTo(direction);
     }
 }
 void KeyboardControllerViewComponentInstance::setWindowSystemBarEnable() {
@@ -172,8 +183,70 @@ void KeyboardControllerViewComponentInstance::onTextSelectionChange(int32_t loca
     DLOG(INFO) << " onKeyboardControllerView onTextSelectionChange";
     // to do
 };
-void KeyboardControllerViewComponentInstance::onFocus() { DLOG(INFO) << " onKeyboardControllerView onFocus"; }
+
+void KeyboardControllerViewComponentInstance::focusDidSet() {
+    int currentIndex = -1;
+    int count = static_cast<int>(this->textInputVector.size());
+    for (size_t i = 0; i < this->textInputVector.size(); ++i) {
+        auto& input = this->textInputVector[i];
+        ArkUINode& node = input->getLocalRootArkUINode();
+        if (node.isFocused()) {
+           currentIndex = static_cast<int>(i);
+           break;
+        }
+    }
+   // 发送 focusDidSet 事件到 JS 层
+    if (currentIndex >= 0 && this->enabled) {
+       auto rnInstancePtr = this->m_deps->rnInstance.lock();
+       if (rnInstancePtr != nullptr) {
+           folly::dynamic payload = folly::dynamic::object
+               ("current", currentIndex)
+               ("count", count);
+           rnInstancePtr->postMessageToArkTS("focusDidSet", payload);
+       }
+   }
+}
+
+void KeyboardControllerViewComponentInstance::onFocus() {
+    DLOG(INFO) << "onKeyboardControllerView onFocus";
+    this->focusDidSet();
+}
+
 void KeyboardControllerViewComponentInstance::onBlur() { DLOG(INFO) << " onKeyboardControllerView onBlur"; }
 
-
+/**
+ * 设置焦点到指定方向的输入框
+ * 实现逻辑仿照 iOS ViewHierarchyNavigator.swift
+ * @param direction "next" | "prev"
+ */
+void KeyboardControllerViewComponentInstance::setFocusTo(const std::string& direction) {
+    // 确定当前焦点组件
+    ComponentInstance::Shared currentFocus = nullptr;
+    for (size_t i = 0; i < this->textInputVector.size(); ++i) {
+        auto& input = this->textInputVector[i];
+        ArkUINode& node = input->getLocalRootArkUINode();
+        if (node.isFocused()) {
+           currentFocus = input;
+           break;
+        }
+    }
+    if (!currentFocus) {
+        DLOG(INFO) << "no current focus available";
+        return;
+    }
+    // 使用 ViewHierarchyNavigator 查找目标输入框
+    auto targetInput = ViewHierarchyNavigator::setFocusTo(direction, currentFocus);
+    if (targetInput) {
+        DLOG(INFO) << "setFocusTo: found target, requesting focus, tag=" << targetInput->getTag();
+        // 获取 ArkUI_NodeHandle 并请求焦点
+        ArkUINode& node = targetInput->getLocalRootArkUINode();
+        ArkUI_NodeHandle nodeHandle = node.getArkUINodeHandle();
+        ArkUI_ErrorCode result = OH_ArkUI_FocusRequest(nodeHandle);
+        if (!(result == ARKUI_ERROR_CODE_NO_ERROR)) {
+            DLOG(WARNING) << "setFocusTo: focus request failed with error code: " << result;
+        }
+    } else {
+        DLOG(INFO) << "setFocusTo: no target input found in direction " << direction;
+    }
+}
 } // namespace rnoh
