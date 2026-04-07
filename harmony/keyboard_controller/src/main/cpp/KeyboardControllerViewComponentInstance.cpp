@@ -242,7 +242,22 @@ void KeyboardControllerViewComponentInstance::setFocusTo(const std::string& dire
         // 获取 ArkUI_NodeHandle 并请求焦点
         ArkUINode& node = targetInput->getLocalRootArkUINode();
         ArkUI_NodeHandle nodeHandle = node.getArkUINodeHandle();
-        ArkUI_ErrorCode result = OH_ArkUI_FocusRequest(nodeHandle);
+        ArkUI_ErrorCode result = ARKUI_ERROR_CODE_NO_ERROR;
+        high_lib_handle = dlopen("libace_ndk.z.so", RTLD_LAZY);
+        if (high_lib_handle == NULL) {
+            DLOG(INFO) << "libace_ndk.z.so not existed";
+            dlclose(high_lib_handle);
+        } else {
+            focusRequestMethod = (ArkUI_ErrorCode(*)(ArkUI_NodeHandle node))dlsym(high_lib_handle, "OH_ArkUI_FocusRequest");
+            bool isFocusRequestMethodExisted = focusRequestMethod != NULL;
+            if (isFocusRequestMethodExisted) {
+                DLOG(INFO) << "OH_ArkUI_FocusRequest method existed";
+                result = focusRequestMethod(nodeHandle);
+            } else {
+                DLOG(INFO) << "OH_ArkUI_FocusRequest method not existed";
+            }
+            dlclose(high_lib_handle);
+        }
         if (!(result == ARKUI_ERROR_CODE_NO_ERROR)) {
             DLOG(WARNING) << "setFocusTo: focus request failed with error code: " << result;
         }
