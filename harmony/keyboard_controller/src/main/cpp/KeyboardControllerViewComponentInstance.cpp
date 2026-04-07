@@ -88,14 +88,12 @@ void KeyboardControllerViewComponentInstance::onMessageReceived(ArkTSMessage con
         if (height > 0) {
             this->keyboardStatus = KeyboardControllerStatus::SHOW;
             this->keyboardHeight = height;
-
-            if (this->textInputVector.size() == 0) {
-                this->focusDidSet();
-                auto textInputVectorTemp = ViewHierarchyNavigator::getAllInputFields(this->shared_from_this());
-                for (size_t i = 0; i < textInputVectorTemp.size(); ++i) {
-                    auto &input = textInputVectorTemp[i];
-                    findTextInputComponents(input);
-                }
+            this->textInputVector.clear();
+            this->focusDidSet();
+            auto textInputVectorTemp = ViewHierarchyNavigator::getAllInputFields(this->shared_from_this());
+            for (size_t i = 0; i < textInputVectorTemp.size(); ++i) {
+                auto &input = textInputVectorTemp[i];
+                findTextInputComponents(input);
             }
         }
         if (height == 0) {
@@ -200,6 +198,7 @@ void KeyboardControllerViewComponentInstance::onTextSelectionChange(int32_t loca
 
 void KeyboardControllerViewComponentInstance::focusDidSet() {
     int currentIndex = -1;
+    this->textInputVector = ViewHierarchyNavigator::getAllInputFields(this->shared_from_this());
     int count = static_cast<int>(this->textInputVector.size());
     for (size_t i = 0; i < this->textInputVector.size(); ++i) {
         auto& input = this->textInputVector[i];
@@ -209,6 +208,7 @@ void KeyboardControllerViewComponentInstance::focusDidSet() {
            break;
         }
     }
+    this->textInputVector.clear();
    // 发送 focusDidSet 事件到 JS 层
     if (currentIndex >= 0 && this->enabled) {
        auto rnInstancePtr = this->m_deps->rnInstance.lock();
@@ -235,6 +235,7 @@ void KeyboardControllerViewComponentInstance::onBlur() { DLOG(INFO) << " onKeybo
  */
 void KeyboardControllerViewComponentInstance::setFocusTo(const std::string& direction) {
     // 确定当前焦点组件
+    this->textInputVector = ViewHierarchyNavigator::getAllInputFields(this->shared_from_this());
     ComponentInstance::Shared currentFocus = nullptr;
     for (size_t i = 0; i < this->textInputVector.size(); ++i) {
         auto& input = this->textInputVector[i];
@@ -262,5 +263,6 @@ void KeyboardControllerViewComponentInstance::setFocusTo(const std::string& dire
     } else {
         DLOG(INFO) << "setFocusTo: no target input found in direction " << direction;
     }
+    this->textInputVector.clear();
 }
 } // namespace rnoh
