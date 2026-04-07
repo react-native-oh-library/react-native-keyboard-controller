@@ -41,7 +41,7 @@ KeyboardControllerViewComponentInstance::KeyboardControllerViewComponentInstance
 void KeyboardControllerViewComponentInstance::onChildInserted(ComponentInstance::Shared const &childComponentInstance,
                                                               std::size_t index) {
     CppComponentInstance::onChildInserted(childComponentInstance, index);
-    m_customNode.insertChild(childComponentInstance->getLocalRootArkUINode(), index + 1);
+    m_customNode.insertChild(childComponentInstance->getLocalRootArkUINode(), index);
     DLOG(INFO) << "###111" << childComponentInstance->getComponentName();
     findTextInputComponents(childComponentInstance);
 }
