@@ -90,6 +90,8 @@ private:
     void keyboardHeightChangeHandle();
     void setFocusTo(const std::string& direction);
     void focusDidSet();
+    void *high_lib_handle = NULL;
+    ArkUI_ErrorCode (*focusRequestMethod)(ArkUI_NodeHandle node);
 };
 } // namespace rnoh
 
