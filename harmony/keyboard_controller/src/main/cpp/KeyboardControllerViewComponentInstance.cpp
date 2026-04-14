@@ -188,9 +188,13 @@ void KeyboardControllerViewComponentInstance::onChange(std::string text) {
     facebook::react::KeyboardControllerViewEventEmitter::TextChangeEvent event = {text};
     if(this->enabled){
         m_eventEmitter->onFocusedInputTextChanged(event);
-     }
-
+    }
 }
+
+void KeyboardControllerViewComponentInstance::onChange(std::string text, std::string extendStr) {
+    onChange(text);
+}
+
 void KeyboardControllerViewComponentInstance::onTextSelectionChange(int32_t location, int32_t length) {
     DLOG(INFO) << " onKeyboardControllerView onTextSelectionChange";
     // to do
