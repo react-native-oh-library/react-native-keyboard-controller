@@ -68,6 +68,7 @@ public:
     void onClick() override;
     // textArea textInput delegate
     void onChange(std::string text) override;
+    void onChange(std::string text, std::string extendStr) override;
     void onBlur() override;
     void onFocus() override;
     void onTextSelectionChange(int32_t location, int32_t length) override;
