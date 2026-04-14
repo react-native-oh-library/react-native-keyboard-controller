@@ -192,7 +192,7 @@ void KeyboardControllerViewComponentInstance::onChange(std::string text) {
 }
 
 void KeyboardControllerViewComponentInstance::onChange(std::string text, std::string extendStr) {
-    onChange(text);
+    onChange(std::move(text));
 }
 
 void KeyboardControllerViewComponentInstance::onTextSelectionChange(int32_t location, int32_t length) {
