@@ -2,8 +2,18 @@
 
 ## 鸿蒙化Log
 
-### v1.16.6-rc.1
+### v1.16.7-beta.2
+- pre-release version 1.16.7-beta.2
+- feat:优化字符串拷贝性能
+- rn框架更新，适配新onChange接口
+- feat:添加api版本隔离
+- feat:修改toolbar箭头点击无响应的问题
+- feat:修改用例黑屏问题
+- feat:支持toolbar的上下键切换输入框焦点并触发对应的回调
 
+### v1.16.6
+
+- release: @react-native-ohos/react-native-keyboard-controller@1.16.6
 - pre-release version 1.16.6-rc.1
 - feat: add Openharmony support for react-native-keyboard-controller
 
