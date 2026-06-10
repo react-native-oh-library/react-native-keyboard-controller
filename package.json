@@ -1,6 +1,6 @@
 {
   "name": "@react-native-ohos/react-native-keyboard-controller",
-  "version": "1.12.8-beta.9",
+  "version": "1.12.8",
   "description": "Keyboard manager which works in identical way on  iOS and Android and harmony",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -17,6 +17,7 @@
     "react-native-keyboard-controller.podspec",
     "jest",
     "!lib/typescript/example",
+    "!harmony/keyboard_controller/build",
     "!android/build",
     "!android/.gradle",
     "!android/gradle",
@@ -67,7 +68,7 @@
   "bugs": {
     "url": "https://github.com/react-native-oh-library/react-native-keyboard-controller/issues"
   },
-  "homepage": "https://kirillzyusko.github.io/react-native-keyboard-controller/",
+  "homepage": "https://github.com/react-native-oh-library/react-native-keyboard-controller/",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
