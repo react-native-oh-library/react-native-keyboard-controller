@@ -1,6 +1,9 @@
 # Changelog
 
 ## 鸿蒙化Log
+### v1.16.8-rc.1
+- pre-release version 1.16.8-rc.1
+- fix:修复状态栏颜色值转换错误
 
 ### v1.16.7-beta.2
 - pre-release version 1.16.7-beta.2
